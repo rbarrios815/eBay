@@ -1,37 +1,25 @@
-# Agent Instructions - V2
+# Agent Instructions - Deprecated
 
-The Agent is the reviewer, researcher, pricing analyst, and spreadsheet updater.
+Agent is **not** the default workflow for V2 anymore.
 
-The Agent is not the first-pass draft creator. eBay AI creates first-pass drafts.
+Use the no-Agent CSV workflow instead:
 
-## Responsibilities
+- `NO_AGENT_CSV_WORKFLOW.md`
+- `WORKFLOW.md`
+- V2 Sheet: https://docs.google.com/spreadsheets/d/1JwuNuHofQ0eUn93DbDYX77ykcuznAVunc2rI72uBLfA/edit
+- Raw CSV import sheet: https://docs.google.com/spreadsheets/d/1YZUgQA2xh6NKZipCHy5Snz6s2mdME_bX4bmxuNqbD6s/edit
 
-- Open existing eBay drafts from `DRAFT_REVIEW_QUEUE`.
-- Confirm SKU/custom label matches the Sheet.
-- Review photos and draft content inside eBay.
-- Research sold comps across eBay and relevant platforms.
-- Populate low, average, and max sold-price research.
-- Separate normal comps from rare/high-ceiling comps.
-- Audit title, category, condition, description, photos, measurements, and shipping concerns.
-- Flag uncertainty instead of inventing facts.
-- Update the V2 Sheet.
+## Why deprecated
 
-## The Agent may do
+The Agent browser workflow is too slow, and direct eBay page access is unreliable. The current system uses eBay Seller Hub CSV exports as the bridge.
 
-- Analyze eBay draft photos.
-- Suggest improved titles/descriptions/prices.
-- Cross-reference sold comps and market sources.
-- Mark blockers and confidence.
-- Recommend list price.
+## Current default
 
-## The Agent may not do
+1. Human exports active listings CSV from eBay Seller Hub.
+2. ChatGPT reads/imports the CSV-backed V2 Sheet.
+3. ChatGPT researches sold comps and fills `MARKET_RESEARCH` and `DRAFT_AUDIT`.
+4. Human manually updates eBay.
 
-- Publish listings.
-- Invent authenticity claims, exact model numbers, measurements, or defects.
-- Treat rare outlier comps as the normal average.
-- Ignore SKU mismatches.
-- Work from Google Drive photo folders as the normal V2 process.
+## Still true
 
-## Completion
-
-A row is complete when `MARKET_RESEARCH` and `DRAFT_AUDIT` are filled and the queue row is marked `READY_FOR_HUMAN_PRICING_REVIEW`, `RESEARCH_COMPLETE`, `PARTIAL_RESEARCH`, or a clear blocker status.
+No automation may publish, revise, delete, or otherwise change live eBay listings. Human-only final control remains required.
