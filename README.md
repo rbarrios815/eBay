@@ -4,69 +4,61 @@ Live V2 Google Sheet: https://docs.google.com/spreadsheets/d/1JwuNuHofQ0eUn93DbD
 
 Raw CSV import sheet for current active listings: https://docs.google.com/spreadsheets/d/1YZUgQA2xh6NKZipCHy5Snz6s2mdME_bX4bmxuNqbD6s/edit
 
-## Current default workflow
+Older visual-prep / draft tracker sheet, if needed for prior batches: https://docs.google.com/spreadsheets/d/1CI763tMOFvOVLYN5QFjScOXnFAaT7idYZdAG9bQvFZY/edit
 
-**No Agent by default. eBay Seller Hub CSV exports are the bridge. ChatGPT reads the CSV/Sheet, researches sold comps, audits listing data, fills the spreadsheet, and never publishes or revises live listings.**
+## Current approved workflow
 
-This replaces the slow Agent-browser workflow for active listing review.
+As of 2026-06-15, Ricky approved an Agent-assisted V2 workflow in addition to the existing CSV/no-Agent workflow.
+
+Canonical Agent instructions: `docs/agent-v2-workflow.md`
 
 ## Source-of-truth split
 
-- **eBay** = live listings, photos, Seller Hub, final edits, publishing, deleting, and offers.
-- **eBay active listings CSV** = reliable export bridge from eBay into the tracker.
-- **Google Sheets V2** = live queue, imported listing data, audit output, market research, item status.
-- **GitHub** = canonical instructions and version history.
-- **ChatGPT without Agent** = spreadsheet reader, researcher, pricing analyst, and audit assistant.
-- **Human** = exports CSV, reviews recommendations, and manually edits/publishes in eBay.
+- eBay = live listings, photos, Seller Hub, drafts, final account actions, offers, and sold status.
+- eBay Photo Upload = first-pass draft creator for new items. Ricky uploads 6 photos per item.
+- eBay active listings CSV = reliable bridge for already-posted active listing data.
+- Google Sheets V2 = tracker, resume markers, audit output, market research, approval status, draft/live URLs, and sold status when easy.
+- GitHub = canonical instructions and version history.
+- ChatGPT / Agent = spreadsheet reader, eBay draft/live listing inspector when available, pricing researcher, quality-control reviewer, and approved editor.
+- Ricky = approval authority for edits and final account actions.
 
-## Human workflow
+## New-item draft workflow
 
-1. In eBay Seller Hub, export/download the active listings CSV.
-2. Upload the CSV to ChatGPT or place it in Drive.
-3. ChatGPT imports/link-wires it into V2.
-4. Open V2 and, if Google Sheets shows `#REF!` in `ACTIVE_CSV_IMPORT!A1`, click **Allow access** for the one-time `IMPORTRANGE` connection.
-5. ChatGPT researches priority rows from `DRAFT_REVIEW_QUEUE` / `MARKET_RESEARCH`.
-6. Human manually decides whether to edit price/title/condition/shipping in eBay.
-7. Human publishes/revises/deletes only after manual review.
+1. Ricky uses eBay Photo Upload with 6 photos per item.
+2. eBay creates draft listings from those photo groups.
+3. Agent inspects the 6 photos inside each eBay draft when possible.
+4. Agent records draft URLs, draft IDs, and status in the V2 spreadsheet.
+5. Agent researches pricing once and writes suggested title, description, category, condition, item specifics, price, shipping, and SKU improvements into the spreadsheet.
+6. ChatGPT reads proposed changes to Ricky for approval.
+7. Agent edits the eBay draft only after Ricky approves.
+8. Publishing requires separate explicit approval.
 
-## ChatGPT no-Agent workflow
+Google Drive photo intake is not required unless eBay draft photos are inaccessible or unclear.
 
-1. Read `START_HERE`, `SOURCE_RULES`, `STATUS_CODES`, and `CHATGPT_RUNBOOK`.
-2. Use `ACTIVE_CSV_IMPORT`, `ITEMS`, and `DRAFT_REVIEW_QUEUE` as the source rows.
-3. Process rows marked `READY_FOR_CHATGPT_RESEARCH`.
-4. Research sold comps from public web sources.
-5. Fill low/average/max pricing fields in `MARKET_RESEARCH`.
-6. Put quality warnings and manual fix notes in `DRAFT_AUDIT`.
-7. Mark items ready for human pricing/review.
-8. Never publish, revise, or delete an eBay listing.
+## Live / already-posted listing audit workflow
 
-## V2 tabs
+1. Start from active eBay listings and cross-reference the V2 spreadsheet / active listings CSV.
+2. Match listings by eBay item ID, live URL, SKU/custom label, title, photos, and other available identifiers.
+3. Populate missing data in `LIVE_LISTING_AUDIT`.
+4. Audit every active listing once unless marked `AUDIT_REDO` or `RESEARCH_REDO`.
+5. Use sold comps first; use active listings only when sold comps are weak.
+6. Record low/average/high sold comps, rare/version high-end note, comp URLs, recommended price, and reasoning.
+7. Classify price as `UNDERPRICED`, `GOOD PRICE`, `SLIGHTLY HIGH`, `TOO HIGH`, or `UNKNOWN`.
+8. Hold higher for rare, complete, clean, better-version, or hard-to-replace items.
+9. Propose non-price fixes too: title, keywords, category, condition notes, item specifics, and description.
+10. Agent edits live listings only after Ricky approves in chat.
 
-- `START_HERE`
-- `ACTIVE_CSV_IMPORT`
-- `DRAFT_REVIEW_QUEUE`
-- `MARKET_RESEARCH`
-- `DRAFT_AUDIT`
-- `ITEMS`
-- `SOURCE_RULES`
-- `STATUS_CODES`
-- `CHATGPT_RUNBOOK`
-- `HUMAN_STEPS`
+## Approval rule
 
-## Deprecated from prior V2 / Agent workflow
+Every draft edit and live-listing edit requires Ricky approval in chat for now. Publishing and other final account actions require separate explicit approval.
 
-The default workflow does **not** require:
+## Required tabs
 
-- ChatGPT Agent browser operation
-- direct eBay URL scraping by ChatGPT
-- Agent opening private drafts
-- Google Drive photo intake
-- photo file names as the matching system
-- photo manifests
-- marker/ruler photos
-- ChatGPT grouping raw photos from Drive
-- Agent creating or confirming drafts
+- `AGENT_CONTROL`
+- `LIVE_LISTING_AUDIT`
 
-## Safety rule
+Agent must read `START_HERE` and `AGENT_CONTROL` first, then continue from row/status/next-action markers instead of duplicating completed work.
 
-ChatGPT may research, audit, suggest, and populate the spreadsheet. ChatGPT must not publish, revise, delete, or otherwise change live eBay listings. Those actions are human-only.
+## Previous no-Agent CSV workflow
+
+The no-Agent CSV workflow remains a fallback for active listing review when Agent access is unavailable or too slow.
