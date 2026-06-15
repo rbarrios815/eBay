@@ -1,45 +1,54 @@
-# V2 Sheet Schema
+# V2 Sheet Schema — No-Agent CSV System
 
 Live V2 Sheet: https://docs.google.com/spreadsheets/d/1JwuNuHofQ0eUn93DbDYX77ykcuznAVunc2rI72uBLfA/edit
 
+Raw CSV import sheet: https://docs.google.com/spreadsheets/d/1YZUgQA2xh6NKZipCHy5Snz6s2mdME_bX4bmxuNqbD6s/edit
+
 ## `START_HERE`
 
-High-level project instructions.
+High-level no-Agent instructions, current import summary, and human-only safety rules.
+
+## `ACTIVE_CSV_IMPORT`
+
+Linked CSV source tab. It uses `IMPORTRANGE` from the raw eBay active listings CSV import sheet.
+
+If `ACTIVE_CSV_IMPORT!A1` shows `#REF!`, open the V2 Sheet and click **Allow access** once.
 
 ## `DRAFT_REVIEW_QUEUE`
 
-Main input queue for the Agent.
+Main research queue for ChatGPT without Agent.
 
 Important columns:
 
 - SKU
-- eBay Draft URL
-- Draft Source
+- eBay Listing URL
+- Review Source
 - User Step Complete?
-- Agent Action
+- ChatGPT Action
 - Status
 - Blocker
 - Priority
 - Item Location/Bin
 - User Notes
-- eBay AI Title
-- Created Date
+- eBay Title From CSV
+- Created/Start Date
 - Last Reviewed
-- Draft Accessible?
-- SKU Confirmed In Draft?
+- Reviewer
+- Listing URL Accessible?
+- SKU Present In eBay Export?
 - Next Action
 - Final Human Status
 
 ## `MARKET_RESEARCH`
 
-Agent output for sold-comps and pricing.
+ChatGPT output for sold-comps and pricing.
 
 Important columns:
 
 - SKU
 - Corrected Item Name
-- eBay AI Title
-- Agent Suggested Title
+- eBay Title From CSV
+- ChatGPT Suggested Title
 - Item ID Confidence
 - Low Sold Price / Source / URL / Description
 - Average Sold Price / Comp Count / URLs / Description
@@ -50,18 +59,18 @@ Important columns:
 - Research Status
 - Confidence
 - Source URLs
-- Agent Notes
+- ChatGPT Notes
 
 ## `DRAFT_AUDIT`
 
-Agent output for draft quality control.
+Listing-quality checklist. It is still named `DRAFT_AUDIT` for continuity, but it now applies to active listings imported from CSV as well.
 
 Checks:
 
 - Title accuracy
 - Category accuracy
 - Condition accuracy
-- Photo sufficiency
+- Photo sufficiency, when screenshots/photos are provided
 - SKU presence and correctness
 - Missing measurements
 - Missing model/size
@@ -77,7 +86,7 @@ Tracks:
 
 - SKU
 - Physical location/bin
-- Draft URL
+- Draft URL, if any
 - Listing URL
 - Overall status
 - Final title
@@ -90,15 +99,15 @@ Tracks:
 
 ## `SOURCE_RULES`
 
-Research rules and preferred source order.
+Research rules and preferred source order. CSV, screenshots, and pasted text are allowed intake bridges. Direct eBay URL reading is reference-only because it may fail.
 
 ## `STATUS_CODES`
 
-Shared status vocabulary.
+Shared status vocabulary for CSV imports, research, audit, and human review.
 
-## `AGENT_RUNBOOK`
+## `CHATGPT_RUNBOOK`
 
-Step-by-step Agent execution rules.
+Step-by-step no-Agent execution rules.
 
 ## `HUMAN_STEPS`
 
