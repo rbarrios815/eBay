@@ -2,66 +2,71 @@
 
 Live V2 Google Sheet: https://docs.google.com/spreadsheets/d/1JwuNuHofQ0eUn93DbDYX77ykcuznAVunc2rI72uBLfA/edit
 
-## Core workflow
+Raw CSV import sheet for current active listings: https://docs.google.com/spreadsheets/d/1YZUgQA2xh6NKZipCHy5Snz6s2mdME_bX4bmxuNqbD6s/edit
 
-**eBay AI creates the draft. ChatGPT Agent reviews the draft, researches sold comps, audits the draft, fills the spreadsheet, and never publishes.**
+## Current default workflow
 
-This V2 project removes the old Google Drive photo-intake workflow.
+**No Agent by default. eBay Seller Hub CSV exports are the bridge. ChatGPT reads the CSV/Sheet, researches sold comps, audits listing data, fills the spreadsheet, and never publishes or revises live listings.**
+
+This replaces the slow Agent-browser workflow for active listing review.
 
 ## Source-of-truth split
 
-- **eBay** = photos, AI-generated drafts, draft/listing state.
-- **Google Sheets V2** = live queue, audit output, market research, item status.
+- **eBay** = live listings, photos, Seller Hub, final edits, publishing, deleting, and offers.
+- **eBay active listings CSV** = reliable export bridge from eBay into the tracker.
+- **Google Sheets V2** = live queue, imported listing data, audit output, market research, item status.
 - **GitHub** = canonical instructions and version history.
-- **ChatGPT Agent** = reviewer, researcher, pricing analyst, and spreadsheet updater.
-- **Human** = creates/saves drafts and publishes only after review.
+- **ChatGPT without Agent** = spreadsheet reader, researcher, pricing analyst, and audit assistant.
+- **Human** = exports CSV, reviews recommendations, and manually edits/publishes in eBay.
 
 ## Human workflow
 
-1. Assign SKU to the physical item.
-2. Put the SKU on the item, bag, or bin.
-3. Use eBay AI/photos to create an eBay draft.
-4. Put the same SKU in eBay Custom Label/SKU.
-5. Save the draft, but do not publish.
-6. Paste SKU + eBay Draft URL into `DRAFT_REVIEW_QUEUE`.
-7. Set status to `READY_FOR_AGENT_REVIEW`.
+1. In eBay Seller Hub, export/download the active listings CSV.
+2. Upload the CSV to ChatGPT or place it in Drive.
+3. ChatGPT imports/link-wires it into V2.
+4. Open V2 and, if Google Sheets shows `#REF!` in `ACTIVE_CSV_IMPORT!A1`, click **Allow access** for the one-time `IMPORTRANGE` connection.
+5. ChatGPT researches priority rows from `DRAFT_REVIEW_QUEUE` / `MARKET_RESEARCH`.
+6. Human manually decides whether to edit price/title/condition/shipping in eBay.
+7. Human publishes/revises/deletes only after manual review.
 
-## Agent workflow
+## ChatGPT no-Agent workflow
 
-1. Open the V2 Sheet.
-2. Read `AGENT_RUNBOOK`.
-3. Process only rows in `DRAFT_REVIEW_QUEUE` marked `READY_FOR_AGENT_REVIEW`.
-4. Open the eBay Draft URL.
-5. Confirm the SKU in eBay matches the Sheet row.
-6. Review photos, title, category, condition, item specifics, and description.
-7. Research sold comps across eBay and other relevant platforms.
-8. Fill `MARKET_RESEARCH` and `DRAFT_AUDIT`.
-9. Mark the row ready for human pricing/review.
-10. Never publish.
+1. Read `START_HERE`, `SOURCE_RULES`, `STATUS_CODES`, and `CHATGPT_RUNBOOK`.
+2. Use `ACTIVE_CSV_IMPORT`, `ITEMS`, and `DRAFT_REVIEW_QUEUE` as the source rows.
+3. Process rows marked `READY_FOR_CHATGPT_RESEARCH`.
+4. Research sold comps from public web sources.
+5. Fill low/average/max pricing fields in `MARKET_RESEARCH`.
+6. Put quality warnings and manual fix notes in `DRAFT_AUDIT`.
+7. Mark items ready for human pricing/review.
+8. Never publish, revise, or delete an eBay listing.
 
 ## V2 tabs
 
 - `START_HERE`
+- `ACTIVE_CSV_IMPORT`
 - `DRAFT_REVIEW_QUEUE`
 - `MARKET_RESEARCH`
 - `DRAFT_AUDIT`
 - `ITEMS`
 - `SOURCE_RULES`
 - `STATUS_CODES`
-- `AGENT_RUNBOOK`
+- `CHATGPT_RUNBOOK`
 - `HUMAN_STEPS`
 
-## Deprecated from V1
+## Deprecated from prior V2 / Agent workflow
 
-The V2 workflow does **not** require:
+The default workflow does **not** require:
 
+- ChatGPT Agent browser operation
+- direct eBay URL scraping by ChatGPT
+- Agent opening private drafts
 - Google Drive photo intake
-- photo file names
+- photo file names as the matching system
 - photo manifests
 - marker/ruler photos
-- ChatGPT grouping photos from Drive
-- Agent creating first-pass drafts from prepared photo rows
+- ChatGPT grouping raw photos from Drive
+- Agent creating or confirming drafts
 
 ## Safety rule
 
-The Agent may research, audit, suggest, and populate the spreadsheet. The Agent must not publish eBay listings.
+ChatGPT may research, audit, suggest, and populate the spreadsheet. ChatGPT must not publish, revise, delete, or otherwise change live eBay listings. Those actions are human-only.
