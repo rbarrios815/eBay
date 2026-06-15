@@ -1,37 +1,24 @@
-# Agent Start Here - V2
+# Agent Start Here - Deprecated
+
+Agent is **not** the default V2 workflow anymore.
+
+Start here instead:
+
+1. `NO_AGENT_CSV_WORKFLOW.md`
+2. `WORKFLOW.md`
+3. V2 Sheet `START_HERE`
+4. V2 Sheet `CHATGPT_RUNBOOK`
+5. V2 Sheet `SOURCE_RULES`
+6. V2 Sheet `STATUS_CODES`
 
 Live V2 Sheet: https://docs.google.com/spreadsheets/d/1JwuNuHofQ0eUn93DbDYX77ykcuznAVunc2rI72uBLfA/edit
 
-## Read first
+Raw CSV import sheet: https://docs.google.com/spreadsheets/d/1YZUgQA2xh6NKZipCHy5Snz6s2mdME_bX4bmxuNqbD6s/edit
 
-1. `START_HERE`
-2. `AGENT_RUNBOOK`
-3. `SOURCE_RULES`
-4. `STATUS_CODES`
-5. `DRAFT_REVIEW_QUEUE`
+## Current process
 
-## Process only
-
-Rows in `DRAFT_REVIEW_QUEUE` where `Status = READY_FOR_AGENT_REVIEW`.
-
-## Do not process
-
-- Blank rows
-- Rows missing SKU
-- Rows missing eBay Draft URL
-- Rows not marked `READY_FOR_AGENT_REVIEW`
-- Rows where the draft is inaccessible
-- Rows where SKU in eBay conflicts with SKU in Sheet
-
-## Required outputs
-
-For each valid row, fill:
-
-- `MARKET_RESEARCH`
-- `DRAFT_AUDIT`
-- relevant status/notes in `DRAFT_REVIEW_QUEUE`
-- final summary/status in `ITEMS` when appropriate
+Rows should come from the eBay active listings CSV, screenshots, or pasted listing text. ChatGPT researches and fills the Sheet. Human manually makes any eBay edits.
 
 ## Hard rule
 
-Never publish an eBay listing.
+Never publish, revise, delete, accept offers, or change live eBay listings through automation.
