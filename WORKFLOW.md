@@ -1,51 +1,53 @@
-# V2 Workflow
+# V2 Workflow — No-Agent CSV System
 
 Live V2 Sheet: https://docs.google.com/spreadsheets/d/1JwuNuHofQ0eUn93DbDYX77ykcuznAVunc2rI72uBLfA/edit
 
+Raw CSV import sheet: https://docs.google.com/spreadsheets/d/1YZUgQA2xh6NKZipCHy5Snz6s2mdME_bX4bmxuNqbD6s/edit
+
 ## Goal
 
-Make the user workflow stupid simple and push the heavy work to eBay AI and ChatGPT Agent.
+Make the user workflow fast and simple by using the eBay active listings CSV as the bridge instead of ChatGPT Agent browser automation.
 
 ## Division of labor
 
-- eBay AI creates first-pass drafts from photos.
-- Human assigns SKU and saves the draft.
-- ChatGPT Agent audits and researches the draft.
-- Google Sheets stores the queue and output.
-- Human publishes only after review.
+- eBay Seller Hub exports the active listings CSV.
+- Google Sheets stores the CSV import, review queue, market research, audit output, and item status.
+- ChatGPT without Agent reads the Sheet/CSV and researches comps.
+- Human manually updates eBay and publishes/revises/deletes only after review.
 
 ## Human intake flow
 
-1. Assign a SKU to the item.
-2. Put the SKU on the physical item, bag, or bin.
-3. Use eBay AI/photos to create an eBay draft.
-4. Enter the same SKU into eBay Custom Label/SKU.
-5. Save the draft.
-6. Paste SKU and eBay Draft URL into `DRAFT_REVIEW_QUEUE`.
-7. Set `Status` to `READY_FOR_AGENT_REVIEW`.
+1. Export active listings CSV from eBay Seller Hub.
+2. Upload the CSV to ChatGPT or Drive.
+3. ChatGPT imports or links the CSV into V2.
+4. In V2, if `ACTIVE_CSV_IMPORT!A1` shows `#REF!`, click **Allow access** for the one-time `IMPORTRANGE` link.
+5. Review `DRAFT_REVIEW_QUEUE` priorities.
+6. Let ChatGPT research selected rows.
+7. Manually edit live eBay listings only after reviewing the recommendations.
 
-## Agent review flow
+## ChatGPT review flow without Agent
 
-1. Read `AGENT_RUNBOOK`.
-2. Process only rows marked `READY_FOR_AGENT_REVIEW`.
-3. Open the eBay Draft URL.
-4. Confirm draft accessibility.
-5. Confirm SKU matches the Sheet row.
-6. Review photos, title, category, condition, description, item specifics, and shipping concerns.
-7. Research sold comps from eBay and relevant platforms.
-8. Populate `MARKET_RESEARCH`.
-9. Populate `DRAFT_AUDIT`.
-10. Mark row `READY_FOR_HUMAN_PRICING_REVIEW` or an appropriate blocker status.
+1. Read `START_HERE`, `SOURCE_RULES`, `STATUS_CODES`, and `CHATGPT_RUNBOOK`.
+2. Use `ACTIVE_CSV_IMPORT` as the imported eBay source.
+3. Use `DRAFT_REVIEW_QUEUE` for research order.
+4. Use item title, category, condition, current price, watchers, and listing URL from the CSV.
+5. Research sold comps from public web sources.
+6. Populate `MARKET_RESEARCH` with low/average/max comps, source URLs, recommended price, and reasoning.
+7. Populate `DRAFT_AUDIT` with quality warnings and manual fix notes.
+8. Mark rows `READY_FOR_HUMAN_PRICE_REVIEW` when research is complete.
 
-## Removed from V2
+## Removed from default workflow
 
-- Google Drive photo intake
-- photo file names as a required matching system
+- ChatGPT Agent browser operation
+- direct eBay URL scraping as the required bridge
+- Agent opening private drafts
+- Google Drive photo-intake as a required first step
+- photo file names as the required matching system
 - photo manifest
 - marker/ruler photo requirement
 - ChatGPT grouping raw photos from Drive
-- Agent creating first-pass drafts from raw photo groups
+- Agent creating or confirming drafts
 
 ## Non-negotiable rule
 
-Agent never publishes listings.
+ChatGPT never publishes, revises, deletes, or changes live eBay listings. Human-only final control remains required.
